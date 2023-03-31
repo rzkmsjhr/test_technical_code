@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <form id="form">
+        <input type="text" id="input" name="input" required>
+        <br>
+        <button type="submit" id="triangle-submit">Generate Segitiga</button>
+        <button type="submit" id="odd-submit">Generate Bilangan Ganjil</button>
+    </form>
+    <div id="triangle-result"></div>
+    <div id="odd-result"></div>
+</body>
+<script>
+    $(document).ready(function () {
+        $('#triangle-submit').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/',
+                method: 'POST',
+                data: $('#form').serialize(),
+                success: function (data) {
+                    $('#triangle-result').html(data);
+                    $('#odd-result').empty();
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+        $('#odd-submit').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/oddnumber',
+                method: 'POST',
+                data: {
+                    number: $('#input').val()
+                },
+                dataType: 'json',
+                success: function (response) {
+                    const oddNumbers = response.join(', ');
+                    $('#odd-result').text("Bilangan ganjilnya " + oddNumbers);
+                    $('#triangle-result').empty();
+                },
+                error: function (err) {
+                    console.error(err);
+                }
+            });
+        });
+    });
+</script>
+
+</html>
